@@ -44,12 +44,10 @@ jobs:
     needs: get_next_version
     steps:
       - name: lets echo
-        env:
-          previous_output: ${{ needs.get_next_version.outputs.next_version}}
-        run: echo $previous_output
-
-
-    # echo $next_version
+        # env:
+        #   previous_output: ${{ needs.get_next_version.outputs.next_version}}
+        # run: echo $previous_output
+        run: echo ${{ needs.get_next_version.outputs.next_version}}
 
 
   # checkout a new branch release-x.y.z
