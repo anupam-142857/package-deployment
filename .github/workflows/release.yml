@@ -19,8 +19,8 @@ jobs:
   get_next_version:
     runs-on: ubuntu-latest
     needs: start_release
-    # outputs:
-    #   next_version: ${{ steps.execute-script.outputs.next_version }}
+    outputs:
+      next_version: ${{ steps.execute-script.outputs.version }}
     steps:
       - name: checkout-repo-content
         uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
         run: |
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo $output
-          echo '::set-output name=version::$output'
+          echo ::set-output name=version::output
       - name: print-next-version-step
         run: echo ${{ steps.execute-script.outputs.version }}  
     
