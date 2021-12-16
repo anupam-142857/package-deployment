@@ -15,6 +15,7 @@ jobs:
         run: echo "::set-output name=bar-output::$(echo 1)"
     outputs:
       foo1-output: ${{ steps.generate-output.outputs.bar-output }}
+  
   foo2:
     needs: foo1
     runs-on: ubuntu-latest
