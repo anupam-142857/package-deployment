@@ -28,9 +28,8 @@ def get_next_version(release_type) -> str:
 
     new_version_tuple = (first, second, third)
     new_version_str = ".".join([str(x) for x in new_version_tuple])
-    new_branch_str = "release-v" + new_version_str
     new_tag_str = "v" + new_version_str
-    return (new_version_str, new_branch_str, new_tag_str)
+    return (new_version_str, new_tag_str)
 
 
 def bump_version(new_version) -> None:
@@ -54,7 +53,7 @@ def main(args):
         output = get_next_version(args.release_type)
     else:
         raise ValueError("Incorrect release type specified")
-    
+
     if args.bump_version:
         bump_version(output[0])
 
