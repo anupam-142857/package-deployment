@@ -10,15 +10,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  start_release:
-    runs-on: ubuntu-latest
-    steps:
-    - name: get-release-type
-      run: echo "Release type = ${{ github.event.inputs.name }}"
+  # start_release:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: get-release-type
+  #     run: echo "Release type = ${{ github.event.inputs.name }}"
   
   get_next_version:
     runs-on: ubuntu-latest
-    needs: start_release
+    # needs: start_release
     
     steps:
       - name: checkout-repo-content
@@ -56,7 +56,7 @@ jobs:
         id: bump-version
         run : |
           echo "current folder = $PWD"
-          echo "current branch = $(git branch --show-current)""
+          echo "current branch = $(git branch --show-current)"
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
           cat version.json
 
