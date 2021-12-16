@@ -16,27 +16,27 @@ jobs:
     - name: get-release-type
       run: echo "Release type = ${{ github.event.inputs.name }}"
   
-  # get_next_version:
-  #   runs-on: ubuntu-latest
-  #   needs: start_release
+  get_next_version:
+    runs-on: ubuntu-latest
+    needs: start_release
     
-  #   steps:
-  #     - name: checkout-repo-content
-  #       uses: actions/checkout@v2
-  #     - name: setup-python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.9
+    steps:
+      - name: checkout-repo-content
+        uses: actions/checkout@v2
+      - name: setup-python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
     
-  #     - name: execute script
-  #       id: execute-script
-  #       run: |
-  #         output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
-  #         echo $output
-  #         echo ::set-output name=version::$output
+      - name: execute script
+        id: execute-script
+        run: |
+          output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
+          echo $output
+          echo ::set-output name=version::$output
     
-  #   outputs:
-  #     next_version: ${{ steps.execute-script.outputs.version }}
+    outputs:
+      next_version: ${{ steps.execute-script.outputs.version }}
     
 
   # print_next_version_job:
@@ -59,5 +59,16 @@ jobs:
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.SUPER_SECRET }}
+        echo $PWD
         # with:
         #   branch: release-v${{ needs.get_current_version.outputs.next_version }}
+  
+  # update the version file
+  # update_version:
+  #   runs-on: ubuntu-latest
+  #   needs: checkout_branch
+  #   steps:
+  #     - uses: actions/setup-python@v2
+  #       run : |
+  #         git checkout release-candidate
+  #         python3 release_utils.py -r $${{ github.event.inputs.release }} -b
