@@ -58,7 +58,7 @@ def main(args):
     if args.bump_version:
         bump_version(next_version)
 
-    print(next_version)
+    return next_version
 
 
 if __name__ == "__main__":
@@ -69,4 +69,5 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    main(args)
+    next_version = main(args)
+    print(next_version)
