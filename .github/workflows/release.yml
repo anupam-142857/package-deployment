@@ -32,8 +32,8 @@ jobs:
         run: |
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo $output
-          new_version=$(echo $output | awk -F, '{print $1}' | sed s/'//g)
-          new_tag=$(echo $output | awk -F, '{print $2}' | sed s/\ // | sed s/'//g)
+          new_version=$(echo $output | awk -F, '{print $1}' | sed s/\'//g | sed s/\(// )
+          new_tag=$(echo $output | awk -F, '{print $2}' | sed s/\ // | sed s/'//g | sed s/\)// )
           echo "new version is $new_version"
           echo "new tag is $new_tag"
           echo ::set-output name=version::$new_version
