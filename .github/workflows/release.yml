@@ -36,7 +36,7 @@ jobs:
           echo ::set-output name=version::$output
     
     outputs:
-      next_version: ${{ steps.get_next_version.outputs.version }}
+      next_version: ${{ steps.execute-script.outputs.version }}
     
 
   print_next_version_job:
