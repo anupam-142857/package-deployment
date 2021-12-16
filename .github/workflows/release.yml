@@ -50,12 +50,10 @@ jobs:
     steps:
       - name: checkout-repo-content
         uses: actions/checkout@v2
-      
       - name: setup-python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      
       - name: bump version
         id: bump-version
         run : |
@@ -63,7 +61,6 @@ jobs:
           echo "current branch = $(git branch --show-current)"
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
           cat version.json
-
       - name: add and commit to main
         uses: EndBug/add-and-commit@v7.5.0
         with:
@@ -80,7 +77,6 @@ jobs:
           # Arguments for the git pull command. Use NO-PULL to avoid the action pulling at all.
           # Default: '--no-rebase'
           pull: 'NO-PULL'
-
           tag: '${{ needs.get_next_version.outputs.new_tag }}'
 
   # build the PyPI package and upload it
@@ -95,12 +91,9 @@ jobs:
         with:
           python-version: 3.9
       - name: install dependencies, build and upload
-        uses: actions/setup-python@v2
         env:
           TWINE_USERNAME: anupambhatnagar
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        with:
-          python-version: 3.9
         run: |
           python3 -m pip install --upgrade pip
           pip install setuptools wheel twine
@@ -111,7 +104,7 @@ jobs:
   create_release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
     - name: Create a Release
       uses: elgohr/Github-Release-Action@master
       env:
