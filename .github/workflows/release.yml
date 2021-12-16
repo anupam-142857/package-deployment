@@ -32,10 +32,17 @@ jobs:
         run: |
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo $output
-          echo ::set-output name=version::$output
+          new_version=echo $output | awk '{print $1}'
+          new_branch=echo $output | awk '{print $2}'
+          new_tag=echo $output | awk '{print $3}'
+          echo ::set-output name=version::$new_version
+          echo ::set-output name=branch::$new_branch
+          echo ::set-output name=tag::$new_tag
     
     outputs:
-      next_version: ${{ steps.execute-script.outputs.version }}
+      new_version: ${{ steps.execute-script.outputs.version }}
+      new_branch: ${{ steps.execute-script.outputs.branch }}
+      new_tag: ${{ steps.execute-script.outputs.tag }}
     
 
   # print_next_version_job:
@@ -76,9 +83,13 @@ jobs:
         id: bump-version
         run : |
           echo $PWD
-          # echo $(git branch)
-          git checkout -b release-candidate
+        
+          git checkout -b ${{ needs.get_current_version.outputs.new_branch }}
           echo $(git branch --show-current)
           out=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
           echo $out
           cat version.json
+
+          git add version.json
+          git commit -m 'bumping the version'
+          git push -u origin ${{ needs.get_current_version.outputs.next_branch }}
