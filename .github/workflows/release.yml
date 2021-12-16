@@ -59,7 +59,7 @@ jobs:
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.SUPER_SECRET }}
-        echo $PWD
+        run: echo $PWD
         # with:
         #   branch: release-v${{ needs.get_current_version.outputs.next_version }}
   
