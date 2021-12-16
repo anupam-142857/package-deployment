@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Person to greet'
-        default: 'World!!'
+        description: 'Release Type'
+        default: 'patch'
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -28,7 +28,7 @@ jobs:
           python-version: 3.9
       - name: execute-script
         run: |
-          output=$(python3 release_utils.py --release_type patch)
+          output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo '::set-output name=next_version::$output'
           echo $next_version
     outputs:
