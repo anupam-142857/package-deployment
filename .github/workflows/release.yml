@@ -78,6 +78,7 @@ jobs:
           echo $PWD
           # echo $(git branch)
           git checkout -b release-candidate
+          echo $(git branch --show-current)
           out=$(python3 release_utils.py --release_type $${{ github.event.inputs.name }} --bump_version)
           echo $out
           cat version.json
