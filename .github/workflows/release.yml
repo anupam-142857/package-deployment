@@ -30,8 +30,8 @@ jobs:
         run: |
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo $output
-    # echo '::set-output name=next_version::$output'
-    # echo $next_version
+          echo '::set-output name=next_version::$output'
+          echo $next_version
     # outputs:
     #   next_version: ${{ steps.execute-script.outputs.next_version }}
 
