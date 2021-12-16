@@ -32,8 +32,10 @@ jobs:
         run: |
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo $output
-          new_version=$(echo $output | awk '{print $1}')
-          new_tag=$(echo $output | awk '{print $2}')
+          new_version=$(echo $output | awk -F, '{print $1}' | sed s/'//g)
+          new_tag=$(echo $output | awk -F, '{print $2}' | sed s/\ // | sed s/'//g)
+          echo "new version is $new_version"
+          echo "new tag is $new_tag"
           echo ::set-output name=version::$new_version
           echo ::set-output name=tag::$new_tag
     
@@ -69,14 +71,7 @@ jobs:
           # The name of the branch to use, if different from the one that triggered the workflow.
           # Default: the branch that triggered the run
           branch: main
-
-          # Determines the way the action fills missing author name and email. Three options are available:
-          # - github_actor -> UserName <UserName@users.noreply.github.com>
-          # - user_info -> Your Display Name <your-actual@email.com>
-          # - github_actions -> github-actions <email associated with the github logo>
-          # Default: github_actor
           default_author: github_actor
-
           message: '${{ needs.get_next_version.outputs.new_version }} release'
           pathspec_error_handling: exitAtEnd
 

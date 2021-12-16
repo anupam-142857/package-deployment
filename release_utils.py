@@ -29,7 +29,7 @@ def get_next_version(release_type) -> str:
     new_version_tuple = (first, second, third)
     new_version_str = ".".join([str(x) for x in new_version_tuple])
     new_tag_str = "v" + new_version_str
-    return (new_version_str, new_tag_str)
+    return new_version_str, new_tag_str
 
 
 def bump_version(new_version) -> None:
