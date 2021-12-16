@@ -78,5 +78,5 @@ jobs:
           echo $PWD
           # echo $(git branch)
           git checkout -b release-candidate
-          python3 release_utils.py -r $${{ github.event.inputs.release }} -b
+          python3 release_utils.py -r $${{ github.event.inputs.name }} -b
           cat version.json
