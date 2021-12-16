@@ -32,8 +32,8 @@ jobs:
         run: |
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
           echo $output
-          new_version=echo $output | awk '{print $1}'
-          new_tag=echo $output | awk '{print $2}'
+          new_version=$(echo $output | awk '{print $1}')
+          new_tag=$(echo $output | awk '{print $2}')
           echo ::set-output name=version::$new_version
           echo ::set-output name=tag::$new_tag
     
@@ -55,20 +55,45 @@ jobs:
       - name: bump version
         id: bump-version
         run : |
-          echo $PWD
-          echo $(git branch --show-current)
-          git checkout main
+          echo "current folder = $PWD"
+          echo "current branch = $(git branch --show-current)""
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
           cat version.json
 
-          # push the update version.json to main
-          git add version.json
-          git commit -m '${{ needs.get_next_version.outputs.new_version }} release'
-          git push -u origin main
+      - name: commit code to main
+        uses: EndBug/add-and-commit@v7 # You can change this to use a specific version.
+        with:
+          author_name: Anupam Bhatnagar
+          author_email: anupam.nyc@gmail.com
 
-          # create and push tag
-          git tag ${{ needs.get_next_version.outputs.new_tag }}
-          git push --tags origin main
+          # The name of the branch to use, if different from the one that triggered the workflow.
+          # Default: the branch that triggered the run
+          branch: main
+
+          # Determines the way the action fills missing author name and email. Three options are available:
+          # - github_actor -> UserName <UserName@users.noreply.github.com>
+          # - user_info -> Your Display Name <your-actual@email.com>
+          # - github_actions -> github-actions <email associated with the github logo>
+          # Default: github_actor
+          default_author: github_actor
+
+          message: '${{ needs.get_next_version.outputs.new_version }} release'
+          pathspec_error_handling: exitAtEnd
+
+          # Arguments for the git pull command. Use NO-PULL to avoid the action pulling at all.
+          # Default: '--no-rebase'
+          pull: 'NO-PULL'
+
+          tag: '${{ needs.get_next_version.outputs.new_tag }}'
+
+  # push the update version.json to main
+  # git add version.json
+  # git commit -m '${{ needs.get_next_version.outputs.new_version }} release'
+  # git push -u origin main
+
+  # # create and push tag
+  # git tag ${{ needs.get_next_version.outputs.new_tag }}
+  # git push --tags origin main
 
   # build the PyPI package and upload it
   # build_and_upload:
