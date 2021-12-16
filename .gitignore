@@ -1,0 +1,3 @@
+.eggs/
+dist/
+package_deployer.egg-info/
