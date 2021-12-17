@@ -94,8 +94,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ncipollo/release-action@v1
         with:
-          tag: 'v0.5.8'
-          # tag: ${{ needs.get_next_version.outputs.new_tag }}
+          tag: '${{ needs.get_next_version.outputs.new_tag }}'
       # - name: Checkout
       #   uses: actions/checkout@v2
       # - name: GH Release
