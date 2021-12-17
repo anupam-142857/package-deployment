@@ -10,12 +10,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # start_release:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: get-release-type
-  #     run: echo "Release type = ${{ github.event.inputs.name }}"
-  
   get_next_version:
     runs-on: ubuntu-latest
     # needs: start_release
@@ -110,49 +104,5 @@ jobs:
       - name: GH Release
         uses: softprops/action-gh-release@v0.1.14
         with:
+          tag: ${{ needs.get_next_version.outputs.new_tag }}
           files: "./dist/*.tar.gz"
-
-
-
-
-
-
-    # runs-on: ubuntu-latest
-    # needs: build_and_upload
-    # steps:
-    # - uses: actions/checkout@main
-    # - name: Create a Release
-    #   uses: elgohr/Github-Release-Action@master
-    #   env:
-    #     RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-    #   with:
-    #     args: ${{ needs.get_next_version.outputs.new_version }} release
-
-
-
-
-
-    
-  # print_next_version_job:
-  #   runs-on: ubuntu-latest
-  #   needs: get_next_version
-  #   steps:
-  #     - name: lets echo
-  #       # env:
-  #       #   previous_output: ${{ needs.get_next_version.outputs.next_version}}
-  #       # run: echo $previous_output
-  #       run: echo ${{ needs.get_next_version.outputs.next_version}}
-
-
-  # checkout a new branch release-x.y.z
-  # checkout_branch:
-  #   runs-on: ubuntu-latest
-  #   needs: get_next_version
-  #   steps:
-  #     - name: checkout-new-release-branch
-  #       uses: peterjgrainger/action-create-branch@v2.0.1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.SUPER_SECRET }}    
-  #       # with:
-        #   branch: release-v${{ needs.get_current_version.outputs.next_version }}
-  
