@@ -110,7 +110,7 @@ jobs:
       - name: GH Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          files: *.tar.gz
+          files: "./dist/*.tar.gz"
 
 
 
