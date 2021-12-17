@@ -48,6 +48,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
+      
       - name: bump version
         id: bump-version
         run : |
@@ -55,6 +56,7 @@ jobs:
           echo "current branch = $(git branch --show-current)"
           output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
           cat version.json
+      
       - name: add and commit to main
         uses: EndBug/add-and-commit@v7.5.0
         with:
@@ -72,18 +74,8 @@ jobs:
           # Default: '--no-rebase'
           pull: 'NO-PULL'
           tag: '${{ needs.get_next_version.outputs.new_tag }}'
-
-  # build the PyPI package and upload it
-  build_and_upload:
-    runs-on: ubuntu-latest
-    needs: update_version_and_push_tag
-    steps:
-      - name: checkout-repo-content
-        uses: actions/checkout@v2
-      - name: setup-python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+      
+      # build the PyPI package and upload it
       - name: install dependencies, build and upload
         env:
           TWINE_USERNAME: anupambhatnagar
@@ -99,10 +91,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_upload
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: GH Release
-        uses: softprops/action-gh-release@v0.1.14
+      - uses: actions/checkout@v2
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ needs.get_next_version.outputs.new_tag }}
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      # - name: GH Release
+      #   uses: softprops/action-gh-release@v0.1.14
 #         with:
 #           tag_name: ${{ needs.get_next_version.outputs.new_tag }}
 #           files: "./dist/*.tar.gz"
