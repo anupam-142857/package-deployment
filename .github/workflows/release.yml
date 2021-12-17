@@ -98,20 +98,19 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install setuptools wheel twine
           python3 setup.py sdist
-          # python3 -m twine upload --repository pypi dist/*
+          python3 -m twine upload --repository pypi dist/*
   
   # create the release
-  create_release:
-    runs-on: ubuntu-latest
-    needs: build_and_upload
-    steps:
-    - uses: actions/checkout@main
-    - name: Create a Release
-      uses: elgohr/Github-Release-Action@master
-      env:
-        RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      with:
-        args: ${{ needs.get_next_version.outputs.new_version }} release
+  # create_release:
+  #   runs-on: ubuntu-latest
+  #   needs: build_and_upload
+  #   steps:
+  #   - uses: actions/checkout@1.0.0
+    
+  #   - name: Create a release
+  #     uses: thomaseizinger/create-release@master
+  #     with:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
@@ -119,25 +118,21 @@ jobs:
 
 
 
+    # runs-on: ubuntu-latest
+    # needs: build_and_upload
+    # steps:
+    # - uses: actions/checkout@main
+    # - name: Create a Release
+    #   uses: elgohr/Github-Release-Action@master
+    #   env:
+    #     RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+    #   with:
+    #     args: ${{ needs.get_next_version.outputs.new_version }} release
 
 
 
 
 
-
-
-
-
-
-# git checkout -b ${{ needs.get_current_version.outputs.new_branch }}
-# echo $(git branch --show-current)
-# out=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
-# echo $out
-# cat version.json
-
-# git add version.json
-# git commit -m 'bumping the version'
-# git push -u origin ${{ needs.get_current_version.outputs.next_branch }}
     
   # print_next_version_job:
   #   runs-on: ubuntu-latest
