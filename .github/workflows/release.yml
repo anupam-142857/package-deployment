@@ -104,5 +104,5 @@ jobs:
       - name: GH Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          tag: ${{ needs.get_next_version.outputs.new_tag }}
+          tag_name: ${{ needs.get_next_version.outputs.new_tag }}
           files: "./dist/*.tar.gz"
